@@ -11,21 +11,21 @@ int main(void)
 	srand((unsigned)time(NULL)); // makes use of the computer's internal clock to control the choice of the seed
 	
 	int a[7];
-	
+
 	for (int i = 0; i < 7; i++)
 	{
 		a[i] = rand() % 101 + 200; // generates a random number between 200 and 300
 	}
-	
+
 	sort(a, 7);
-	
+
 	for (int i = 0; i < 7; i++)
 	{
 		cout << i << ". " << a[i] << "\n";
 	}
-	
+
 	cout << "\n";
-	
+
 	system("PAUSE");
 	return 0;
 }
