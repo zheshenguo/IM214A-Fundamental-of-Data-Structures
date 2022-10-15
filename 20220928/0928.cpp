@@ -1,6 +1,4 @@
-﻿//組員1. 1101612 郭哲慎
-
-#include <iostream>
+﻿#include <iostream>
 #include <fstream>
 using namespace std;
 
