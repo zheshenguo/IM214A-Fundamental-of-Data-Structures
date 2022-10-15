@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <cstdlib>
 #include <cmath>
 
@@ -83,7 +83,7 @@ char operstack::cur() {//回傳當前最上方的運算子
 }
 
 int main() {
-	string s; // 輸入範例:"-5+9*3-81/-9" 答案:31 
+	string s; // 輸入範例:"-5+9*3-81/-9" 答案:31
 	cout << "請輸入算式:" << endl;
 	cin >> s;
 	cout << "答案:" << answer(s) << endl;
@@ -119,15 +119,16 @@ int answer(string s) {
 	operstack opers;  //運算子stack
 
 	int pos = 0;
-	while (/*讀輸入字串直到讀完為止*/) {
+	while (/*讀輸入字串直到讀完為止*/pos < s.length()) {
 		char spot = s[pos];
 		if (/*如果是現在讀到的是運算元*/isDigit(spot)) {
 			//將數字push進stack
 			digs.push(spot - 48);
-			while (/*當現在讀到的數的下一位也是數字*/) {
+			while (/*當現在讀到的數的下一位也是數字*/isDigit(s[pos + 1])) {
 				//把stack裡的數字丟出來加上一個位數後，加上下一位再存回去stack
-				
+				digs.push(digs.pop() * 10 + (s[pos + 1] - 48));
 				//換下一個位置讀
+				pos++;
 			}
 		}
 		else {
@@ -136,55 +137,54 @@ int answer(string s) {
 				digs.push(-(s[pos + 1] - 48));
 				//換下一個位置讀
 				pos++;
-				while (/*當現在讀到的數的下一位也是數字*/) {
+				while (/*當現在讀到的數的下一位也是數字*/isDigit(s[pos + 1])) {
 					//把stack裡的數字丟出來加上一個位數後，，加上「負的」下一位並再存回去stack
-					
+					digs.push(digs.pop() * 10 + s[pos + 1] - 48);
 					//換下一個位置讀
-
+					pos++;
 				}
 			}
-			else if (/*如果是現在讀到的是減號'-'&&前一位不是數字*/) {
+			else if (/*如果是現在讀到的是減號'-'&&前一位不是數字*/spot == '-' && !isDigit(s[pos - 1])) {
 				//把下一位數字變成負的，存進stack
-				
+				digs.push(-(s[pos + 1] - 48));
 				//換下一個位置讀
-
-				while (/*當現在讀到的數的下一位也是數字*/) {
+				pos++;
+				while (/*當現在讀到的數的下一位也是數字*/isDigit(s[pos + 1])) {
 					//把stack裡的數字丟出來加上一個位數後，，加上「負的」下一位並再存回去stack
-					
+					digs.push(digs.pop() * 10 + s[pos + 1] - 48);
 					//換下一個位置讀
-
+					pos++;
 				}
 			}
 			else { //執行運算
-				while (/*如果讀到的運算子的層級 <= stack裡的最上層的運算子的層級(使用priority)*/) {
+				while (/*如果讀到的運算子的層級 <= stack裡的最上層的運算子的層級(使用priority)*/priority(spot) <= priority(opers.cur())) {
 					//Pop出一個運算子
-					
+					char oper = opers.pop();
 					//Pop出兩個運算元
-					
-
+					int val2 = digs.pop();
+					int val1 = digs.pop();
 					//進行計算(使用calculate)
-					
+					int result = calculate(val1, val2, oper);
 					//將結果存入stack
-
+					digs.push(result);
 				}
 				//將現在讀到的運算子進入stack
 				opers.push(spot);
-
 			}
 		}
 		//換下一個位置讀
 		pos++;
 	}
-	while (/*當運算子stack不是空的*/) {
+	while (/*當運算子stack不是空的*/!opers.isEmpty()) {
 		//Pop出一個運算子
-		
+		char oper = opers.pop();
 		//Pop出兩個運算元
-		
-
+		int val2 = digs.pop();
+		int val1 = digs.pop();
 		//進行計算(使用calculate)
-		
+		int result = calculate(val1, val2, oper);
 		//將結果存入stack
-
+		digs.push(result);
 	}
 	return (digs.cur()/*丟最後結果出來*/);
 }
