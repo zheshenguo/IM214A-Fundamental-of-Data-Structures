@@ -186,5 +186,5 @@ int answer(string s) {
 		//將結果存入stack
 		digs.push(result);
 	}
-	return (digs.cur()/*丟最後結果出來*/);
+	return (/*丟最後結果出來*/digs.cur());
 }

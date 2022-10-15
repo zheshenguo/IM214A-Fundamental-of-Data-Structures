@@ -46,4 +46,3 @@ void sort(int* m, int n)
 		}
 	}     
 }
-
